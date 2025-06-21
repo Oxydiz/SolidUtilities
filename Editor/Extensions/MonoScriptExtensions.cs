@@ -22,7 +22,8 @@
         /// <param name="className">A specific class name to search for.</param>
         /// <returns>The <see cref="Type"/> of the class implemented by this script or <see langword="null"/>,
         /// if the type was not found.</returns>
-        [PublicAPI, CanBeNull] public static Type GetClassType(this MonoScript script, string className = null)
+        [PublicAPI, CanBeNull]
+        public static Type GetClassType(this MonoScript script, Type _type, string className = null)
         {
             Type simpleType = script.GetClass();
             if (simpleType != null)
@@ -33,7 +34,8 @@
             if (string.IsNullOrEmpty(foundClassName))
                 return null;
 
-            string assemblyName = script.GetAssemblyName();
+            //string assemblyName = script.GetAssemblyName();
+            string assemblyName = _type.GetShortAssemblyName();
             Assembly assembly;
 
             try
@@ -74,7 +76,7 @@
             if (string.IsNullOrEmpty(rawClassName))
                 return rawClassName;
 
-            if ( ! rawClassName.Contains("<"))
+            if (!rawClassName.Contains("<"))
                 return rawClassName;
 
             int argsCount = rawClassName.CountChars(',') + 1;
@@ -87,11 +89,16 @@
         /// <returns>
         /// The assembly name without the .dll extension, or an empty string if the assembly was not found.
         /// </returns>
-        [PublicAPI, NotNull] public static string GetAssemblyName(this MonoScript script)
+        [PublicAPI, NotNull]
+        public static string GetAssemblyName(this MonoScript script)
         {
             string assemblyName = script.Internal_GetAssemblyName();
             int lastDotIndex = assemblyName.LastIndexOf('.');
-            return lastDotIndex == -1 ? string.Empty : assemblyName.Substring(0, lastDotIndex);
+            if (assemblyName == null || assemblyName == string.Empty)
+            {
+                return string.Empty;
+            }
+            return lastDotIndex == -1 ? assemblyName : assemblyName.Substring(0, lastDotIndex);
         }
 
         private static string GetNamespaceName(this MonoScript asset)

@@ -5,7 +5,7 @@
     using JetBrains.Annotations;
     using SolidUtilities;
     using UnityEditor;
-    
+
     public static class AssetHelper
     {
         /// <summary>
@@ -35,7 +35,7 @@
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 var asset = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
 
-                if (asset is null || asset.GetClassType(typeNameWithoutSuffix) != type)
+                if (asset == null || asset.GetClassType(type, typeNameWithoutSuffix) != type)
                     continue;
 
                 GUID = guid;

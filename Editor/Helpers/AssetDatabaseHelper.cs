@@ -15,6 +15,7 @@
         [PublicAPI, CanBeNull, Pure]
         public static Type GetTypeFromGUID(string guid)
         {
+            Type classType = AssetDatabase.GetMainAssetTypeFromGUID(new GUID(guid));
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
             if (string.IsNullOrEmpty(assetPath))
@@ -22,9 +23,9 @@
 
             var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
 
-            return script == null ? null : script.GetClassType();
+            return script == null ? null : script.GetClassType(classType);
         }
-        
+
         /// <summary>
         /// Returns a unique GUID that is known to have no conflicts with the existing assets, so that you create a new asset manually.
         /// </summary>
@@ -37,7 +38,7 @@
             {
                 newGUID = GUID.Generate();
             }
-            while ( ! string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(newGUID.ToString())));
+            while (!string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(newGUID.ToString())));
 
             return newGUID.ToString();
         }
@@ -48,7 +49,7 @@
         /// <returns>Instance of a disposable struct.</returns>
         [PublicAPI]
         public static DisabledAssetDatabase DisabledScope() => new DisabledAssetDatabase(default);
-        
+
         /// <summary>
         /// Completely prevents AssetDatabase from importing assets or refreshing.
         /// </summary>

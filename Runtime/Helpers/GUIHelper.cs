@@ -6,7 +6,7 @@
 
     public static class GUIHelper
     {
-        private static readonly GUIStyle _closeButtonStyle = GUI.skin.FindStyle("ToolbarSeachCancelButton");
+        private static readonly GUIStyle _closeButtonStyle = GUI.skin.FindStyle("ToolbarSearchCancelButton");
 
         /// <summary>Draws the close button.</summary>
         /// <param name="buttonRect">Rect the button should be located in.</param>
@@ -18,7 +18,8 @@
         ///     GUI.FocusControl(null);
         /// }
         /// </code></example>
-        [PublicAPI] public static bool CloseButton(Rect buttonRect)
+        [PublicAPI]
+        public static bool CloseButton(Rect buttonRect)
         {
             // This is a known problem that the button does not align to center horizontally for some reason.
             // I tried alignment = TextAnchor.MiddleCenter, setting padding and margin to different values,
