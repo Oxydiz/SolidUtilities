@@ -15,7 +15,7 @@
         [PublicAPI, CanBeNull, Pure]
         public static Type GetTypeFromGUID(string guid)
         {
-            Type classType = AssetDatabase.GetMainAssetTypeFromGUID(new GUID(guid));
+            Type classType = AssetDatabase.GetMainAssetTypeFromGUID(new UnityEngine.GUID(guid));
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
             if (string.IsNullOrEmpty(assetPath))
@@ -32,11 +32,11 @@
         /// <returns>A unique asset GUID.</returns>
         public static string GetUniqueGUID()
         {
-            GUID newGUID;
+            UnityEngine.GUID newGUID;
 
             do
             {
-                newGUID = GUID.Generate();
+                newGUID = UnityEngine.GUID.Generate();
             }
             while (!string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(newGUID.ToString())));
 

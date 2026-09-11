@@ -18,7 +18,7 @@
         public static IEnumerable<SerializedObject> GetSerializedObjectsFromOpenScenes(FoundObjects foundObjects)
         {
             int countLoaded = SceneManager.sceneCount;
- 
+
             for (int i = 0; i < countLoaded; i++)
             {
                 foreach (var serializedObject in GetSerializedObjectsFromScene(SceneManager.GetSceneAt(i), foundObjects))
@@ -64,12 +64,12 @@
             {
                 if (component == null) // The component script is probably missing.
                     continue;
-                
-                int instanceId = component.GetInstanceID();
-                if (foundObjects.Components.Contains(instanceId))
+
+                EntityId entityId = component.GetEntityId();
+                if (foundObjects.Components.Contains(entityId))
                     continue;
 
-                foundObjects.Components.Add(instanceId);
+                foundObjects.Components.Add(entityId);
                 var serializedObject = new SerializedObject(component);
                 yield return serializedObject;
 
@@ -140,17 +140,17 @@
             {
                 yield return serializedObject;
             }
-            
+
             PrefabUtility.UnloadPrefabContents(rootGameObject);
         }
 
         private static IEnumerable<SerializedObject> GetSerializedObjectsFromScriptableObject(Object scriptableObject, FoundObjects foundObjects)
         {
-            var instanceId = scriptableObject.GetInstanceID();
-            if (foundObjects.ScriptableObjects.Contains(instanceId))
+            EntityId entityId = scriptableObject.GetEntityId();
+            if (foundObjects.ScriptableObjects.Contains(entityId))
                 yield break;
 
-            foundObjects.ScriptableObjects.Add(instanceId);
+            foundObjects.ScriptableObjects.Add(entityId);
             var soSerializedObject = new SerializedObject(scriptableObject);
 
             yield return soSerializedObject;
@@ -160,11 +160,11 @@
                 yield return childSerializedObject;
             }
         }
-            
+
         public class FoundObjects
         {
-            public readonly HashSet<int> ScriptableObjects = new HashSet<int>();
-            public readonly HashSet<int> Components = new HashSet<int>();
+            public readonly HashSet<EntityId> ScriptableObjects = new HashSet<EntityId>();
+            public readonly HashSet<EntityId> Components = new HashSet<EntityId>();
             public readonly HashSet<string> Prefabs = new HashSet<string>();
         }
     }
